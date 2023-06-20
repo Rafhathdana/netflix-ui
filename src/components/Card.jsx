@@ -2,16 +2,25 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { IoPlayCircleSharp } from "react-icons/io5";
+import { AiOutlinePlus } from "react-icons/ai";
 import { RiThumbUpFill, RiThumbDownFill } from "react-icons/ri";
 import { BiChevronDown } from "react-icons/bi";
+import { BsCheck } from "react-icons/bs";
+import axios from "axios";
 import { onAuthStateChanged } from "firebase/auth";
 import { firebaseAuth } from "../utils/firebase-config";
+import { useDispatch } from "react-redux";
+import { removeMovieFromLiked } from "../store";
 import video from "../assets/video.mkv";
-import { BsCheck } from "react-icons/bs";
-import { AiOutlinePlus } from "react-icons/ai";
 
-export default React.memo(function Card({ index, movieData, isLiked = false }) {
+export default React.memo(function Card({
+  index,
+  movieData,
+  isLiked = false,
+  key,
+}) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isHovered, setIsHovered] = useState(false);
   const [email, setEmail] = useState(undefined);
 
@@ -20,6 +29,17 @@ export default React.memo(function Card({ index, movieData, isLiked = false }) {
       setEmail(currentUser.email);
     } else navigate("/login");
   });
+
+  const addToList = async () => {
+    try {
+      await axios.post("http://localhost:5000/api/user/add", {
+        email,
+        data: movieData,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Container
@@ -61,9 +81,16 @@ export default React.memo(function Card({ index, movieData, isLiked = false }) {
                 <RiThumbUpFill title="Like" />
                 <RiThumbDownFill title="Dislike" />
                 {isLiked ? (
-                  <BsCheck title="remove From List" />
+                  <BsCheck
+                    title="Remove from List"
+                    onClick={() =>
+                      dispatch(
+                        removeMovieFromLiked({ movieId: movieData.id, email })
+                      )
+                    }
+                  />
                 ) : (
-                  <AiOutlinePlus title="Add to my list" />
+                  <AiOutlinePlus title="Add to my list" onClick={addToList} />
                 )}
               </div>
               <div className="info">
@@ -73,7 +100,7 @@ export default React.memo(function Card({ index, movieData, isLiked = false }) {
             <div className="genres flex">
               <ul className="flex">
                 {movieData.genres.map((genre) => (
-                  <li key={genre}>{genre}</li>
+                  <li>{genre}</li>
                 ))}
               </ul>
             </div>

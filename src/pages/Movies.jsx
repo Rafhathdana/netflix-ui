@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { fetchMovies, getGenres } from "../store";
 import { firebaseAuth } from "../utils/firebase-config";
 import { onAuthStateChanged } from "firebase/auth";
@@ -12,17 +11,16 @@ import SelectGenre from "../components/SelectGenre";
 
 export default function Movies() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const navigate = useNavigate();
   const genresLoaded = useSelector((state) => state.netflix.genresLoaded);
   const movies = useSelector((state) => state.netflix.movies);
   const genres = useSelector((state) => state.netflix.genres);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getGenres());
-  }, []);
+  }, [dispatch]);
   useEffect(() => {
     if (genresLoaded) dispatch(fetchMovies({ type: "movie" }));
-  }, [genresLoaded]);
+  }, [genresLoaded, dispatch]);
   window.onscroll = () => {
     setIsScrolled(window.pageYOffset === 0 ? false : true);
     return () => (window.onscroll = null);

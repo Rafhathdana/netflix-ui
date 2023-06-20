@@ -48,7 +48,7 @@ export default React.memo(function CardSlider({ data, title }) {
       </div>
     </Container>
   );
-})
+});
 const Container = styled.div`
   gap: 1rem;
   position: relative;
