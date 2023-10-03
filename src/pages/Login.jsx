@@ -17,7 +17,7 @@ export default function Login() {
       const { email, password } = formValues;
       await signInWithEmailAndPassword(firebaseAuth, email, password);
     } catch (err) {
-      console.log(err);
+      alert(err)
     }
   };
   onAuthStateChanged(firebaseAuth, (currentUser) => {
