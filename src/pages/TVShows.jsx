@@ -14,7 +14,7 @@ export default function TVShows() {
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
   const genresLoaded = useSelector((state) => state.netflix.genresLoaded);
-  const movies = useSelector((state) => state.netflix.movies);
+  const completeMovies = useSelector((state) => state.netflix.movies);
   const genres = useSelector((state) => state.netflix.genres);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -37,7 +37,7 @@ export default function TVShows() {
       </div>
       <div className="data">
         <SelectGenre genres={genres} type="tv" />
-        {movies.length ? <Slider movies={movies} /> : <NotAvailable />}
+        {completeMovies.length ? <Slider completeMovies={completeMovies} /> : <NotAvailable />}
       </div>
     </Container>
   );

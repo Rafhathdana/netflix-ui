@@ -9,12 +9,13 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMovies, getGenres } from "../store";
 import Slider from "../components/Slider";
+import NotAvailable from "../components/NotAvailable";
 
 export default function Netflix() {
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
   const genresLoaded = useSelector((state) => state.netflix.genresLoaded);
-  const movies = useSelector((state) => state.netflix.movies);
+  const completeMovies = useSelector((state) => state.netflix.movies);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getGenres());
@@ -54,7 +55,11 @@ export default function Netflix() {
           </div>
         </div>
       </div>
-      <Slider movies={movies} />
+      {completeMovies?.length ? (
+        <Slider completeMovies={completeMovies} />
+      ) : (
+        <NotAvailable />
+      )}
     </Container>
   );
 }

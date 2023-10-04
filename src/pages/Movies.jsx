@@ -8,26 +8,39 @@ import Navbar from "../components/Navbar";
 import Slider from "../components/Slider";
 import NotAvailable from "../components/NotAvailable";
 import SelectGenre from "../components/SelectGenre";
+import { useNavigate } from "react-router-dom";
 
 export default function Movies() {
   const [isScrolled, setIsScrolled] = useState(false);
   const genresLoaded = useSelector((state) => state.netflix.genresLoaded);
-  const movies = useSelector((state) => state.netflix.movies);
+  const completeMovies = useSelector((state) => state.netflix.movies);
   const genres = useSelector((state) => state.netflix.genres);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
     dispatch(getGenres());
   }, [dispatch]);
+
   useEffect(() => {
     if (genresLoaded) dispatch(fetchMovies({ type: "movie" }));
   }, [genresLoaded, dispatch]);
-  window.onscroll = () => {
-    setIsScrolled(window.pageYOffset === 0 ? false : true);
-    return () => (window.onscroll = null);
-  };
-  onAuthStateChanged(firebaseAuth, (currentUser) => {
-    // if (currentUser) navigate("/");
-  });
+
+  useEffect(() => {
+    window.onscroll = () => {
+      setIsScrolled(window.pageYOffset === 0 ? false : true);
+    };
+
+    return () => {
+      window.onscroll = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    onAuthStateChanged(firebaseAuth, (currentUser) => {
+      if (currentUser) navigate("/");
+    });
+  }, []);
+
   return (
     <Container>
       <div className="navbar">
@@ -35,11 +48,16 @@ export default function Movies() {
       </div>
       <div className="data">
         <SelectGenre genres={genres} type="movie" />
-        {movies.length ? <Slider movies={movies} /> : <NotAvailable />}
-      </div>
+        {completeMovies.length ? (
+          <Slider completeMovies={completeMovies} />
+        ) : (
+          <NotAvailable />
+        )}
+      </div>`1`
     </Container>
   );
 }
+
 const Container = styled.div`
   .data {
     margin-top: 8rem;

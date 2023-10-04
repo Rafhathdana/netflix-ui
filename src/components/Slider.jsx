@@ -1,9 +1,9 @@
 import React from "react";
 import CardSlider from "./CardSlider";
 
-export default React.memo(function Slider({ movies }) {
+export default React.memo(function Slider({ completeMovies }) {
   const getMoviesFromRange = (from, to) => {
-    return movies.slice(from, to);
+    return completeMovies.slice(from, to);
   };
   return (
     <div>
