@@ -10,7 +10,6 @@ import { useDispatch, useSelector } from "react-redux";
 import NotAvailable from "../components/NotAvailable";
 
 export default function UserListedMovies() {
-  const movies = useSelector((state) => state.netflix.movies);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -26,6 +25,7 @@ export default function UserListedMovies() {
       dispatch(getUsersLikedMovies(email));
     }
   }, [email, dispatch]);
+  const movies = useSelector((state) => state.netflix.liked);
 
   window.onscroll = () => {
     setIsScrolled(window.pageYOffset === 0 ? false : true);
@@ -39,16 +39,20 @@ export default function UserListedMovies() {
         <h1>My List</h1>
         <div className="grid flex">
           {movies ? (
-            movies.map((movie, index) => {
-              return (
-                <Card
-                  movieData={movie}
-                  index={index}
-                  key={movie.id}
-                  isLiked={true}
-                />
-              );
-            })
+            movies.length > 0 ? (
+              movies.map((movie, index) => {
+                return (
+                  <Card
+                    movieData={movie}
+                    index={index}
+                    key={movie.id}
+                    isLiked={true}
+                  />
+                );
+              })
+            ) : (
+              <NotAvailable />
+            )
           ) : (
             <NotAvailable />
           )}

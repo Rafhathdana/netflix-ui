@@ -8,7 +8,6 @@ import Navbar from "../components/Navbar";
 import Slider from "../components/Slider";
 import NotAvailable from "../components/NotAvailable";
 import SelectGenre from "../components/SelectGenre";
-import { useNavigate } from "react-router-dom";
 
 export default function Movies() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -16,7 +15,6 @@ export default function Movies() {
   const completeMovies = useSelector((state) => state.netflix.movies);
   const genres = useSelector((state) => state.netflix.genres);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   useEffect(() => {
     dispatch(getGenres());
   }, [dispatch]);
@@ -37,7 +35,7 @@ export default function Movies() {
 
   useEffect(() => {
     onAuthStateChanged(firebaseAuth, (currentUser) => {
-      if (currentUser) navigate("/");
+      // if (currentUser) navigate("/");
     });
   }, []);
 
@@ -53,7 +51,8 @@ export default function Movies() {
         ) : (
           <NotAvailable />
         )}
-      </div>`1`
+      </div>
+      `1`
     </Container>
   );
 }

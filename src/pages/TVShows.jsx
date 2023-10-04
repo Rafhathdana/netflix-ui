@@ -19,16 +19,17 @@ export default function TVShows() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getGenres());
-  }, []);
+  }, [dispatch]);
   useEffect(() => {
     if (genresLoaded) dispatch(fetchMovies({ type: "tv" }));
-  }, [genresLoaded]);
+  }, [genresLoaded, dispatch]);
   window.onscroll = () => {
     setIsScrolled(window.pageYOffset === 0 ? false : true);
     return () => (window.onscroll = null);
   };
+
   onAuthStateChanged(firebaseAuth, (currentUser) => {
-    // if (currentUser) navigate("/");
+    if (!currentUser) navigate("/login");
   });
   return (
     <Container>
@@ -37,7 +38,11 @@ export default function TVShows() {
       </div>
       <div className="data">
         <SelectGenre genres={genres} type="tv" />
-        {completeMovies.length ? <Slider completeMovies={completeMovies} /> : <NotAvailable />}
+        {completeMovies.length ? (
+          <Slider completeMovies={completeMovies} tvsw={true} />
+        ) : (
+          <NotAvailable />
+        )}
       </div>
     </Container>
   );

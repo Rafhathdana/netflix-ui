@@ -8,6 +8,7 @@ import { API_KEY, BASE_URL, TMDB_BASE_URL } from "../utils/constants";
 
 const initialState = {
   movies: [],
+  liked: [],
   genresLoaded: false,
   genres: [],
 };
@@ -114,7 +115,7 @@ const NetflixSlice = createSlice({
       state.movies = action.payload;
     });
     builder.addCase(getUsersLikedMovies.fulfilled, (state, action) => {
-      state.movies = action.payload;
+      state.liked = action.payload;
     });
     builder.addCase(removeMovieFromLiked.fulfilled, (state, action) => {
       state.movies = action.payload;
